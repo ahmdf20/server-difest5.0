@@ -1,6 +1,5 @@
 const mysql = require('mysql')
 const fs = require('fs')
-const clientRedis = require('../redis.config.js')
 const jwt = require('jsonwebtoken')
 const bycrypt = require('bcrypt')
 const db = mysql.createConnection({
@@ -24,16 +23,10 @@ const login = (request, response) => {
       }
 
       const user = result[0]
-      // console.log(password)
-      // console.log(user.password)
-      // const generatenewPW = await bycrypt.hash(password, 10)
       const checkPassword = await bycrypt.compare(password, user.password)
-      // console.log(generatenewPW)
       if (checkPassword) {
         // Set Token
         const token = jwt.sign(user.userid, 'Luthor-dev')
-        // Set token to redis
-        clientRedis.set(`token:${user.id}`, token, 'EX', 3600)
         // Return to http
         response.status(201).cookie('user', user, {
           maxAge: 604800,

@@ -10,6 +10,7 @@ app.use(express.json())
 app.use(cors())
 app.use(cookieParser())
 
+app.use('/submissions',express.static("submissons"))
 app.use('/uploads',express.static("uploads"))
 app.use('/api', routes)
 
